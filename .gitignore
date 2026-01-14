@@ -1,0 +1,31 @@
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyc
+
+# Временные файлы
+*.tmp
+*.bak
+*.log
+
+# Файлы дизайна (необязательно, можете убрать если хотите их хранить)
+*.pyxel
+*.aseprite

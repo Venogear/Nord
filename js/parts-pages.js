@@ -72,18 +72,18 @@ function resolveCategoryImage(categoryId, fallbackFromData) {
 
   // Default local images by CategoryId (so you don't need to fill CategoryImage in the sheet)
   const map = {
-    front_loaders: "/images/categories/front-loaders.png",
-    bulldozers: "/images/categories/bulldozers.png",
-    excavators: "/images/categories/excavators.png",
-    engines: "/images/categories/engines.jpg",
-    forklifts: "/images/categories/itp.jpg",
-    asphalt_pavers: "/images/categories/large_asfaltoukladchik-min.jpg",
-    autograders: "/images/categories/large_autograder.jpg",
-    compressor_stations: "/images/categories/large_compressor.jpg",
-    pneumo_cylinders: "/images/categories/pneumo_cylinders.jpg",
-    filters: "/images/categories/filters.jpg",
-    tires: "/images/categories/all.jpg",
-    oils: "/images/categories/oils.jpg",
+    front_loaders: "images/categories/front-loaders.png",
+    bulldozers: "images/categories/bulldozers.png",
+    excavators: "images/categories/excavators.png",
+    engines: "images/categories/engines.jpg",
+    forklifts: "images/categories/itp.jpg",
+    asphalt_pavers: "images/categories/large_asfaltoukladchik-min.jpg",
+    autograders: "images/categories/large_autograder.jpg",
+    compressor_stations: "images/categories/large_compressor.jpg",
+    pneumo_cylinders: "images/categories/pneumo_cylinders.jpg",
+    filters: "images/categories/filters.jpg",
+    tires: "images/categories/all.jpg",
+    oils: "images/categories/oils.jpg",
   };
   return map[String(categoryId || "").trim()] || "";
 }
@@ -327,23 +327,23 @@ function renderCatalogSidebarTiles() {
   if (!brandsMount && !catsMount) return;
 
   const BRAND_IMAGE_BY_NAME = {
-    SDLG: "/images/brand/sdlg.jpg",
-    XCMG: "/images/brand/xcmg.jpg",
-    XGMA: "/images/brand/xgma.jpg",
-    LIUGONG: "/images/brand/liugong.jpg",
-    LONKING: "/images/brand/lonking.jpg",
-    CHENGGONG: "/images/brand/chenggong.jpg",
-    ENSIGN: "/images/brand/ensign.jpg",
-    SHANTUI: "/images/brand/shantui.jpg",
-    CUMMINS: "/images/brand/cummins.jpg",
-    ZF: "/images/brand/zf.jpg",
-    HANGCHA: "/images/brand/hangcha.png",
-    DOOSAN: "/images/brand/doosan.jpg",
-    KOMATSU: "/images/brand/komatsu.jpg",
-    HYUNDAI: "/images/brand/hyundai.jpg",
-    WEICHAI: "/images/brand/weichai.jpg",
-    YUCHAI: "/images/brand/yuchai.jpg",
-    DEUTZ: "/images/brand/deutz.jpg",
+    SDLG: "images/brand/sdlg.jpg",
+    XCMG: "images/brand/xcmg.jpg",
+    XGMA: "images/brand/xgma.jpg",
+    LIUGONG: "images/brand/liugong.jpg",
+    LONKING: "images/brand/lonking.jpg",
+    CHENGGONG: "images/brand/chenggong.jpg",
+    ENSIGN: "images/brand/ensign.jpg",
+    SHANTUI: "images/brand/shantui.jpg",
+    CUMMINS: "images/brand/cummins.jpg",
+    ZF: "images/brand/zf.jpg",
+    HANGCHA: "images/brand/hangcha.png",
+    DOOSAN: "images/brand/doosan.jpg",
+    KOMATSU: "images/brand/komatsu.jpg",
+    HYUNDAI: "images/brand/hyundai.jpg",
+    WEICHAI: "images/brand/weichai.jpg",
+    YUCHAI: "images/brand/yuchai.jpg",
+    DEUTZ: "images/brand/deutz.jpg",
   };
 
   const BRANDS = [
@@ -379,12 +379,12 @@ function renderCatalogSidebarTiles() {
   // - existing: use current files from images/categories/
   // - missing: prepared filenames (add these files to images/categories/)
   const CATALOG_CATEGORY_IMAGE_BY_NAME = {
-    "ДВИГАТЕЛИ": "/images/categories/engines.jpg",
-    "ФИЛЬТРЫ": "/images/categories/filters.jpg",
-    "ШИНЫ": "/images/categories/all.jpg",
-    "ТРАНСМИССИИ КОРОБКИ ПЕРЕДАЧ": "/images/categories/transmissions.jpg",
-    "ГИДРАВЛИЧЕСКИЕ УЗЛЫ И АГРЕГАТЫ": "/images/categories/hydraulics.jpg",
-    "КОРОНКИ": "/images/categories/crowns.jpg",
+    "ДВИГАТЕЛИ": "images/categories/engines.jpg",
+    "ФИЛЬТРЫ": "images/categories/filters.jpg",
+    "ШИНЫ": "images/categories/all.jpg",
+    "ТРАНСМИССИИ КОРОБКИ ПЕРЕДАЧ": "images/categories/transmissions.jpg",
+    "ГИДРАВЛИЧЕСКИЕ УЗЛЫ И АГРЕГАТЫ": "images/categories/hydraulics.jpg",
+    "КОРОНКИ": "images/categories/crowns.jpg",
   };
 
   if (brandsMount) {

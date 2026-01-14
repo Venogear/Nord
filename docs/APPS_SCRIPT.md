@@ -1,4 +1,4 @@
-# Google Apps Script (Web App): каталог + заявки
+# Google Apps Script (Web App): прием заявок
 
 ВАЖНО:
 - Параметры **Telegram** (`TG_BOT_TOKEN`, `TG_CHAT_ID`) и (опционально) **Email** (`LEADS_EMAIL_TO`) задаются **внутри Google Apps Script** (в вашей таблице: **Extensions → Apps Script** → файл `Code.gs`).
@@ -7,31 +7,19 @@
 
 Ниже — минимальный шаблон Apps Script, который:
 
-- по `GET ?action=catalog` возвращает JSON каталога (как `data/equipment.json`)
-- по `GET ?action=parts` возвращает JSON запчастей (категории/бренды) для страниц **Запчасти для дорожно‑строительной техники** / **Запчасти для складской техники**
-- по `POST ?action=lead` принимает заявку и (опционально) отправляет в Telegram и/или на email
+- по `POST ?action=lead` принимает заявку и записывает в Google Таблицу, отправляет в Telegram и/или на email
 
 ## 1) Создание
 
-1. Создайте Google Таблицу по структуре `docs/GOOGLE_SHEET_CATALOG.md`.
+1. Создайте новую Google Таблицу для хранения заявок.
 2. Откройте **Extensions → Apps Script**.
 3. Вставьте код ниже в `Code.gs`.
-4. **Deploy → New deployment → Web app**:
+4. Заполните настройки: `LEADS_EMAIL_TO`, `TG_BOT_TOKEN`, `TG_CHAT_ID`.
+5. **Deploy → New deployment → Web app**:
    - Execute as: **Me**
    - Who has access: **Anyone**
-5. Скопируйте URL деплоя и подставьте в `js/config.js`:
-   - `ENDPOINTS.catalogJson = "<URL>?action=catalog"`
-   - `ENDPOINTS.partsJson = "<URL>?action=parts"`
+6. Скопируйте URL деплоя и подставьте в `js/config.js`:
    - `ENDPOINTS.leadSubmit = "<URL>?action=lead"`
-
-Важно про тип скрипта:
-- Если вы открыли Apps Script **через таблицу** (Extensions → Apps Script), скрипт “container‑bound”, и `SpreadsheetApp.getActiveSpreadsheet()` работает.
-- Если вы создали Apps Script как **отдельный проект** (не из таблицы), то `getActiveSpreadsheet()` может быть `null`.
-  В этом случае замените строку в `buildCatalog()`:
-  - `const ss = SpreadsheetApp.getActiveSpreadsheet();`
-  на:
-  - `const ss = SpreadsheetApp.openById("ВАШ_SPREADSHEET_ID");`
-  где `SPREADSHEET_ID` — это часть URL таблицы между `/d/` и `/edit`.
 
 ## 2) Code.gs (пример)
 
@@ -41,20 +29,11 @@
 ```javascript
 // === Stroytech: Apps Script Web App ===
 // Endpoints:
-// - GET  ?action=catalog  -> JSON каталога техники (как equipment.json)
-// - GET  ?action=parts    -> JSON запчастей (категории/бренды) для parts-road/parts-warehouse
 // - POST ?action=lead     -> прием заявки + запись в лист leads + (опц.) Telegram/email
 //
 // ВАЖНО: токен Telegram и chat_id храните ТОЛЬКО здесь (в Apps Script), не на сайте.
 
 // --- Листы таблицы ---
-// Каталог техники (вариант A: один лист с русскими колонками)
-const SHEET_CATALOG_RU = "Catalog";
-// Каталог техники (вариант B: два листа с англ. колонками)
-const SHEET_CATEGORIES = "categories";
-const SHEET_ITEMS = "items";
-// Запчасти (новая структура)
-const SHEET_PARTS = "Parts";
 // Заявки
 const SHEET_LEADS = "leads";
 
@@ -64,10 +43,7 @@ const TG_BOT_TOKEN = "";   // пример: "123456:ABC..." (секрет)
 const TG_CHAT_ID = "";     // пример: "123456789" или "-1001234567890"
 
 function doGet(e) {
-  const action = (e && e.parameter && e.parameter.action) || "";
-  if (action === "catalog") return jsonResponse(buildCatalog());
-  if (action === "parts") return jsonResponse(buildParts());
-  return jsonResponse({ ok: false, error: "Unknown action", available: ["catalog", "parts"] }, 400);
+  return jsonResponse({ ok: false, error: "Only POST requests are supported for leads" }, 400);
 }
 
 function doPost(e) {
@@ -106,145 +82,7 @@ function doPost(e) {
   return jsonResponse({ ok: true });
 }
 
-// === 1) Каталог техники ===
-function buildCatalog() {
-  const ss = SpreadsheetApp.getActiveSpreadsheet();
-
-  // Вариант A: один лист "Catalog" (русские колонки)
-  const ruSheet = ss.getSheetByName(SHEET_CATALOG_RU);
-  if (ruSheet) {
-    const rows = sheetToObjects(ruSheet);
-
-    const categoryIdByName = {
-      "экскаваторы": "excavators",
-      "бульдозеры": "bulldozers",
-      "итп": "itp"
-    };
-
-    const items = rows
-      .map((r) => {
-        const categoryName = String(r["Категория"] || "").trim();
-        const catKey = categoryName.toLowerCase();
-        const categoryId = categoryIdByName[catKey] || slugify(catKey) || catKey;
-
-        const shortDesc = String(r["Краткое описание"] || "").trim();
-        return {
-          id: Number(r["ID"]),
-          category: categoryId,
-          name: String(r["Название"] || "").trim(),
-          shortDesc: shortDesc,
-          fullDesc: shortDesc,
-          priceRent: String(r["Цена аренды"] || "").trim(),
-          priceBuy: String(r["Цена покупки"] || "").trim(),
-          image: String(r["Изображение"] || "").trim(),
-          specs: parseSpecs(r["Характеристики"]),
-          available: toBool(r["В наличии"]),
-          featured: toBool(r["На главной"]),
-          showOnMain: toBool(r["На главной"])
-        };
-      })
-      .filter((x) => x.id && x.category && x.name);
-
-    const nameById = {
-      excavators: "Экскаваторы",
-      bulldozers: "Бульдозеры",
-      itp: "ИТП"
-    };
-
-    const cats = {};
-    items.forEach((it) => (cats[it.category] = true));
-    const categories = Object.keys(cats).map((id) => ({ id, name: nameById[id] || id }));
-
-    return { lastUpdated: new Date().toISOString().slice(0, 10), categories, items };
-  }
-
-  // Вариант B: два листа categories/items (англ. колонки)
-  const catSheet = ss.getSheetByName(SHEET_CATEGORIES);
-  const itemsSheet = ss.getSheetByName(SHEET_ITEMS);
-  if (!catSheet || !itemsSheet) {
-    return { lastUpdated: new Date().toISOString().slice(0, 10), categories: [], items: [] };
-  }
-
-  const categories = sheetToObjects(catSheet)
-    .map((c) => ({ id: String(c.id || "").trim(), name: String(c.name || "").trim() }))
-    .filter((c) => c.id && c.name);
-
-  const items = sheetToObjects(itemsSheet)
-    .map((it) => ({
-      id: Number(it.id),
-      category: String(it.category || "").trim(),
-      name: String(it.name || "").trim(),
-      shortDesc: String(it.shortDesc || "").trim(),
-      fullDesc: String(it.fullDesc || "").trim(),
-      priceRent: String(it.priceRent || "").trim(),
-      priceBuy: String(it.priceBuy || "").trim(),
-      image: String(it.image || "").trim(),
-      specs: parseSpecs(it.specs),
-      available: toBool(it.available),
-      featured: toBool(it.featured),
-      showOnMain: toBool(it.showOnMain)
-    }))
-    .filter((x) => x.id && x.category && x.name);
-
-  return { lastUpdated: new Date().toISOString().slice(0, 10), categories, items };
-}
-
-// === 2) Запчасти (Parts) ===
-// Лист "Parts" со столбцами:
-// Domain | CategoryId | CategoryName | BrandId | BrandName | BrandImage | BrandChips
-// Domain: "road" или "warehouse"
-function buildParts() {
-  const ss = SpreadsheetApp.getActiveSpreadsheet();
-  const sh = ss.getSheetByName(SHEET_PARTS);
-
-  const out = {
-    lastUpdated: new Date().toISOString().slice(0, 10),
-    source: sh ? "Google Sheets" : "missing_sheet",
-    domains: {
-      road: { name: "Дорожно‑строительная техника", categories: [] },
-      warehouse: { name: "Складская техника", categories: [] }
-    },
-    brandsByCategory: {}
-  };
-
-  if (!sh) return out;
-
-  const rows = sheetToObjects(sh);
-  const catSeenByDomain = { road: {}, warehouse: {} };
-  const brandSeenByCat = {}; // {catId:{brandId:true}}
-
-  rows.forEach((r) => {
-    const domain = String(r["Domain"] || "").trim().toLowerCase();
-    if (domain !== "road" && domain !== "warehouse") return;
-
-    const categoryId = String(r["CategoryId"] || "").trim();
-    const categoryName = String(r["CategoryName"] || "").trim();
-    const brandId = String(r["BrandId"] || "").trim().toLowerCase();
-    const brandName = String(r["BrandName"] || "").trim();
-    const brandImage = String(r["BrandImage"] || "").trim();
-    const brandChips = String(r["BrandChips"] || "").trim();
-
-    if (!categoryId || !categoryName) return;
-
-    // categories (unique)
-    if (!catSeenByDomain[domain][categoryId]) {
-      catSeenByDomain[domain][categoryId] = true;
-      out.domains[domain].categories.push({ id: categoryId, name: categoryName, image: "" });
-    }
-
-    // brandsByCategory (unique)
-    out.brandsByCategory[categoryId] = out.brandsByCategory[categoryId] || [];
-    brandSeenByCat[categoryId] = brandSeenByCat[categoryId] || {};
-    if (brandId && brandName && !brandSeenByCat[categoryId][brandId]) {
-      brandSeenByCat[categoryId][brandId] = true;
-      out.brandsByCategory[categoryId].push({ id: brandId, name: brandName, image: brandImage, chips: brandChips });
-    }
-  });
-
-  return out;
-}
-
-// === 3) Заявки ===
+// === Заявки ===
 function saveLeadToSheet(payload) {
   const ss = SpreadsheetApp.getActiveSpreadsheet();
   let sh = ss.getSheetByName(SHEET_LEADS);
@@ -305,30 +143,6 @@ function sendEmail(payload) {
 }
 
 // === Helpers ===
-function parseSpecs(value) {
-  const s = String(value || "").trim();
-  if (!s) return [];
-  return s
-    .split(/[,;|]/g)
-    .map((x) => x.trim())
-    .filter(Boolean);
-}
-
-function toBool(v) {
-  const s = String(v || "").trim().toLowerCase();
-  if (s === "false" || s === "0" || s === "no" || s === "нет") return false;
-  return s === "true" || s === "1" || s === "yes" || s === "да";
-}
-
-function slugify(s) {
-  // простой слаг: латиница/цифры/- (для id)
-  return String(s || "")
-    .trim()
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, "-")
-    .replace(/^-+|-+$/g, "");
-}
-
 function sheetToObjects(sheet) {
   const values = sheet.getDataRange().getValues();
   if (!values || values.length < 2) return [];

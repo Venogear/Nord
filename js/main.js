@@ -1,8 +1,7 @@
 import { initRevealAnimations } from "./scroll-animations.js";
 import { initFab } from "./fab.js";
 import { initForms } from "./form-handler.js";
-import { createEquipmentCard, initEquipmentModal, loadEquipmentData } from "./catalog-loader.js";
-import { CATEGORY_TILE_IMAGES, CONTACTS, ENDPOINTS } from "./config.js";
+import { CONTACTS } from "./config.js";
 
 function qs(sel, root = document) {
   return root.querySelector(sel);
@@ -32,15 +31,9 @@ function showRuntimeBanner(message) {
 }
 
 function initRuntimeGuards() {
-  // Частая причина “пустых страниц”: открыли через file:// и fetch() не работает.
+  // Частая причина "пустых страниц": открыли через file:// и fetch() не работает.
   if (location.protocol === "file:") {
-    showRuntimeBanner("Откройте сайт через локальный сервер (например, http://localhost:8080/), а не через file:// — иначе каталог и скрипты могут не загрузиться.");
-  }
-
-  // Если каталогный endpoint не задан, честно говорим, что будет использоваться локальный fallback.
-  const hasEquipmentUI = Boolean(document.getElementById("catalog-grid") || document.getElementById("main-equipment-grid"));
-  if (hasEquipmentUI && !ENDPOINTS.catalogJson) {
-    showRuntimeBanner("Каталог из Google Таблицы еще не подключен (ENDPOINTS.catalogJson пустой). Сейчас используется резервный файл data/equipment.json.");
+    showRuntimeBanner("Откройте сайт через локальный сервер (например, http://localhost:8080/), а не через file:// — иначе скрипты могут не загрузиться.");
   }
 
   window.addEventListener("error", (e) => {
@@ -51,17 +44,6 @@ function initRuntimeGuards() {
   window.addEventListener("unhandledrejection", (e) => {
     const msg = e?.reason?.message ? String(e.reason.message) : String(e.reason || "Ошибка запроса");
     showRuntimeBanner(`Ошибка запроса: ${msg}. Проверьте, что сайт открыт через http:// и что доступны endpoints/файлы.`);
-  });
-
-  window.addEventListener("equipmentSource", (e) => {
-    const source = e?.detail?.source;
-    if (!source) return;
-    if (source === "local") {
-      showRuntimeBanner("Каталог загружен из локального data/equipment.json (fallback). Проверьте ENDPOINTS.catalogJson и доступ Web App (Anyone).");
-    }
-    if (source === "remote_failed") {
-      showRuntimeBanner(`Не удалось загрузить каталог из Google (fallback на локальный). Причина: ${e?.detail?.message || "ошибка запроса"}`);
-    }
   });
 }
 
@@ -226,186 +208,6 @@ function initContactBindings() {
   }
 }
 
-async function initIndexFeatured() {
-  const grid = document.getElementById("main-equipment-grid");
-  if (!grid) return;
-
-  let byId = new Map();
-  const modal = initEquipmentModal((id) => byId.get(String(id)));
-
-  const render = async () => {
-    const data = await loadEquipmentData();
-    const all = (data.items || []).filter((x) => x);
-    // Если в источнике нет колонки “На главной”, showOnMain будет false и блок окажется пустым.
-    // В этом случае показываем первые позиции, чтобы главная не выглядела “пустой”.
-    const marked = all.filter((x) => x.showOnMain);
-    const items = (marked.length ? marked : all).slice(0, 8);
-    byId = new Map(items.map((x) => [String(x.id), x]));
-    grid.innerHTML = "";
-    if (items.length === 0) {
-      grid.innerHTML = `<div class="empty-state">Каталог пуст. Проверьте источник данных (Google Apps Script) или заполните fallback JSON.</div>`;
-      return;
-    }
-    items.forEach((it) => grid.appendChild(createEquipmentCard(it)));
-    initRevealAnimations();
-  };
-
-  try {
-    await render();
-
-    window.addEventListener("equipmentUpdated", () => {
-      render().catch(() => {});
-    });
-
-    const open = (id) => modal?.openById(String(id));
-
-    grid.addEventListener("click", (e) => {
-      const card = e.target.closest?.(".equipment-card");
-      if (!card) return;
-      open(card.dataset.itemId);
-    });
-
-    grid.addEventListener("keydown", (e) => {
-      if (e.key !== "Enter" && e.key !== " ") return;
-      const card = e.target.closest?.(".equipment-card");
-      if (!card) return;
-      e.preventDefault();
-      open(card.dataset.itemId);
-    });
-  } catch (e) {
-    grid.innerHTML = `<div class="empty-state">Не удалось загрузить каталог. Проверьте настройки или попробуйте позже.</div>`;
-    console.warn(e);
-  }
-}
-
-function renderCategoryFilters(container, categories) {
-  container.innerHTML = "";
-
-  const makeTile = ({ id, name }) => {
-    const b = document.createElement("button");
-    b.type = "button";
-    b.className = "category-tile";
-    b.dataset.filter = id;
-
-    const imgSrc = CATEGORY_TILE_IMAGES[id] || "";
-    b.innerHTML = `
-      <span class="category-tile-thumb" aria-hidden="true">
-        ${imgSrc ? `<img src="${imgSrc}" alt="" loading="lazy" onerror="this.remove()" />` : ""}
-      </span>
-      <span class="category-tile-name">${escapeText(name)}</span>
-    `;
-
-    return b;
-  };
-
-  container.appendChild(makeTile({ id: "all", name: "Все" }));
-  for (const cat of categories) {
-    container.appendChild(makeTile({ id: cat.id, name: cat.name }));
-  }
-}
-
-function escapeText(s) {
-  return String(s ?? "")
-    .replaceAll("&", "&amp;")
-    .replaceAll("<", "&lt;")
-    .replaceAll(">", "&gt;")
-    .replaceAll('"', "&quot;")
-    .replaceAll("'", "&#039;");
-}
-
-async function initCatalogPage() {
-  const grid = document.getElementById("catalog-grid");
-  const filters = document.getElementById("category-filters");
-  const search = document.getElementById("search");
-  const empty = document.getElementById("empty-state");
-  if (!grid || !filters) return;
-
-  try {
-    let items = [];
-    let categories = [];
-    let byId = new Map();
-    const modal = initEquipmentModal((id) => byId.get(String(id)));
-
-    let activeFilter = "all";
-    let query = "";
-
-    const apply = () => {
-      const q = query.trim().toLowerCase();
-      const visible = items.filter((it) => {
-        if (!it) return false;
-        if (activeFilter !== "all" && it.category !== activeFilter) return false;
-        if (q && !String(it.name || "").toLowerCase().includes(q)) return false;
-        return true;
-      });
-
-      grid.innerHTML = "";
-      visible.forEach((it) => grid.appendChild(createEquipmentCard(it)));
-      initRevealAnimations();
-
-      if (empty) empty.hidden = visible.length > 0;
-    };
-
-    const loadAndRender = async () => {
-      const data = await loadEquipmentData();
-      items = Array.isArray(data.items) ? data.items : [];
-      categories = Array.isArray(data.categories) ? data.categories : [];
-      byId = new Map(items.map((x) => [String(x.id), x]));
-      renderCategoryFilters(filters, categories);
-
-      // Если текущий фильтр больше не существует — сбрасываем на all
-      const validFilters = new Set(["all", ...categories.map((c) => c.id)]);
-      if (!validFilters.has(activeFilter)) activeFilter = "all";
-      const activeBtn =
-        filters.querySelector(`button[data-filter="${activeFilter}"]`) ||
-        filters.querySelector(`button[data-filter="all"]`);
-      if (activeBtn) qsa("button[data-filter]", filters).forEach((b) => b.classList.toggle("is-active", b === activeBtn));
-
-      apply();
-    };
-
-    filters.addEventListener("click", (e) => {
-      const btn = e.target.closest?.("button[data-filter]");
-      if (!btn) return;
-      activeFilter = btn.dataset.filter || "all";
-      qsa("button[data-filter]", filters).forEach((b) => b.classList.toggle("is-active", b === btn));
-      apply();
-    });
-
-    if (search) {
-      search.addEventListener("input", () => {
-        query = search.value || "";
-        apply();
-      });
-    }
-
-    const open = (id) => modal?.openById(String(id));
-
-    grid.addEventListener("click", (e) => {
-      const card = e.target.closest?.(".equipment-card");
-      if (!card) return;
-      open(card.dataset.itemId);
-    });
-
-    grid.addEventListener("keydown", (e) => {
-      if (e.key !== "Enter" && e.key !== " ") return;
-      const card = e.target.closest?.(".equipment-card");
-      if (!card) return;
-      e.preventDefault();
-      open(card.dataset.itemId);
-    });
-
-    await loadAndRender();
-
-    window.addEventListener("equipmentUpdated", () => {
-      loadAndRender().catch(() => {});
-    });
-  } catch (e) {
-    grid.innerHTML = `<div class="empty-state">Не удалось загрузить каталог. Проверьте настройки endpoint.</div>`;
-    if (empty) empty.hidden = true;
-    console.warn(e);
-  }
-}
-
 initYear();
 initRuntimeGuards();
 initThemeToggle();
@@ -416,9 +218,5 @@ forceRevealFallback();
 initContactBindings();
 initFab();
 initForms();
-
-// Page-specific init
-// initIndexFeatured(); // Отключено: карточки техники убраны с главной страницы
-initCatalogPage();
 
 

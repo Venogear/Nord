@@ -932,7 +932,7 @@ html[data-theme="dark"] .product-thumb {
 
 .domain-btn {
   text-align: left;
-  border: 1px solid var(--border);
+  border: 0;
   border-radius: 16px;
   padding: 18px;
   background: var(--card);
@@ -943,7 +943,11 @@ html[data-theme="dark"] .product-thumb {
   overflow: hidden;
   min-height: 120px;
   display: flex;
+  box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.25);
+}
 
+html[data-theme="dark"] .domain-btn {
+  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.25);
 }
 
 .domain-btn::before {
@@ -985,8 +989,11 @@ html[data-theme="dark"] .product-thumb {
 }
 
 .domain-btn.is-active {
-  border-color: var(--accent);
-  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.22), 0 0 0 2px var(--accent);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.22), 0 0 0 3px var(--accent);
+}
+
+html[data-theme="dark"] .domain-btn.is-active {
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.4), 0 0 0 3px var(--gold);
 }
 
 /* Active state: highlight only by border/ring (text stays the same color) */

@@ -418,7 +418,7 @@ initFab();
 initForms();
 
 // Page-specific init
-initIndexFeatured();
+// initIndexFeatured(); // Отключено: карточки техники убраны с главной страницы
 initCatalogPage();
 
 

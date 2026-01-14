@@ -76,7 +76,7 @@ function resolveCategoryImage(categoryId, fallbackFromData) {
     bulldozers: "images/categories/bulldozers.jpg",
     excavators: "images/categories/excavators.png",
     engines: "images/categories/engines.jpg",
-    forklifts: "images/categories/tires.jpg",
+    forklifts: "",
     asphalt_pavers: "images/categories/large_asfaltoukladchik-min.jpg",
     autograders: "images/categories/large_autograder.jpg",
     compressor_stations: "images/categories/large_compressor.jpg",
@@ -187,7 +187,7 @@ function sortCategoriesForDomain(domain, categories) {
   return out;
 }
 
-function makeTile({ title, subtitle, href, image, chips, linkText, eager = false }) {
+function makeTile({ title, subtitle, href, image, chips, linkText }) {
   const isLink = Boolean(href);
   const root = document.createElement(isLink ? "a" : "div");
   root.className = "tile";
@@ -197,7 +197,7 @@ function makeTile({ title, subtitle, href, image, chips, linkText, eager = false
 
   const media = document.createElement("div");
   media.className = "tile-media";
-  applyTileMediaBackground(media, image, { eager });
+  applyTileMediaBackground(media, image);
   root.appendChild(media);
 
   const body = document.createElement("div");
@@ -442,8 +442,6 @@ async function renderDomainCategories({ domain, mountId }) {
         href,
         linkText: linkText,
         image: resolveCategoryImage(id, c.image),
-        // Eager-load first row on road page to improve LCP
-        eager: domain === "road" && idx < 4,
       })
     );
   });

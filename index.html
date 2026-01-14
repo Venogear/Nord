@@ -1,0 +1,232 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="Поставка запчастей для строительной и спецтехники. Аренда и продажа экскаваторов, бульдозеров, погрузчиков. Сервисное обслуживание." />
+    <title>Норд Вест — запчасти, аренда и продажа строительной техники</title>
+    <script>
+      (function () {
+        try {
+          var key = "stroytech_theme_v1";
+          var saved = localStorage.getItem(key);
+          var theme = saved;
+          if (!theme && window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches) theme = "dark";
+          if (theme === "dark") document.documentElement.setAttribute("data-theme", "dark");
+        } catch (e) {}
+      })();
+    </script>
+    <link rel="icon" href="favicon.ico" sizes="any" />
+    <link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="favicon-16.png" />
+    <link rel="apple-touch-icon" href="apple-touch-icon.png" />
+    <link rel="stylesheet" href="css/style.css" />
+    <link rel="stylesheet" href="css/responsive.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+  </head>
+  <body>
+    <a class="skip-link" href="#content">Перейти к содержимому</a>
+    <noscript>
+      <div class="no-js">
+        Для работы каталога и форм нужен JavaScript. Включите JavaScript и откройте сайт через локальный сервер (например, <code>http://localhost:8080/</code>).
+      </div>
+    </noscript>
+
+    <header class="site-header">
+      <div class="container header-inner">
+        <a class="brand" href="index.html" aria-label="Норд Вест — на главную">
+          <span class="brand-mark" aria-hidden="true"><img src="images/branding/logo-mark.png" alt="" width="120" height="60" /></span>
+        </a>
+
+        <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav">
+          <span class="nav-toggle-lines" aria-hidden="true"></span>
+          <span class="sr-only">Меню</span>
+        </button>
+
+        <nav id="site-nav" class="site-nav" aria-label="Основная навигация">
+          <a class="nav-link is-active" href="index.html">Главная</a>
+          <a class="nav-link" href="catalog.html">Каталог</a>
+          <a class="nav-link" href="delivery.html">Доставка</a>
+          <a class="nav-link" href="contacts.html">Контакты</a>
+        </nav>
+
+        <a class="header-phone" data-contact-link="phone" href="tel:+74951368273"
+          ><span class="header-phone-number">+7 (495) 136‑82‑73</span></a
+        >
+      </div>
+    </header>
+
+    <main id="content">
+      <section class="hero">
+        <div class="container hero-inner hero-inner--single">
+          <div class="hero-content reveal">
+            <p class="kicker">Продажа • Аренда • Запчасти • Сервис</p>
+            <h1 class="hero-title">Запчасти для строительства и спецтранспорта</h1>
+            <p class="hero-subtitle">
+              Поставляем запчасти, комплектующие и технику. Подберем аналог, найдем редкую деталь, организуем доставку.
+            </p>
+            <ul class="hero-badges" aria-label="Ключевые преимущества">
+              <li>Каталог 5000+ позиций</li>
+              <li>Подбор по VIN/каталогу</li>
+              <li>Доставка по РФ и СНГ</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="container">
+          <div class="section-head reveal">
+            <h2 class="section-title">Наша продукция</h2>
+            <p class="section-desc">Запчасти, техника и оборудование. Полный ассортимент — в каталоге.</p>
+          </div>
+
+          <div class="grid equipment-grid" id="main-equipment-grid" aria-live="polite">
+            <div class="skeleton-card" aria-hidden="true"></div>
+            <div class="skeleton-card" aria-hidden="true"></div>
+            <div class="skeleton-card" aria-hidden="true"></div>
+            <div class="skeleton-card" aria-hidden="true"></div>
+            <div class="skeleton-card" aria-hidden="true"></div>
+            <div class="skeleton-card" aria-hidden="true"></div>
+          </div>
+
+          <div class="section-actions reveal">
+            <a class="btn btn--primary" href="catalog.html">Открыть каталог</a>
+          </div>
+        </div>
+      </section>
+
+      <section class="section section--muted" id="services">
+        <div class="container">
+          <div class="section-head reveal">
+            <h2 class="section-title">Услуги</h2>
+            <p class="section-desc">Закрываем все потребности: от запчастей до полного цикла аренды.</p>
+          </div>
+
+          <div class="grid features-grid">
+            <article class="feature-card reveal">
+              <h3 class="feature-title">Запчасти и комплектующие</h3>
+              <p class="feature-text">Оригинальные и аналоги для строительной, дорожной, грузовой техники.</p>
+            </article>
+            <article class="feature-card reveal">
+              <h3 class="feature-title">Аренда техники</h3>
+              <p class="feature-text">Экскаваторы, погрузчики, бульдозеры — под ваш объект и бюджет.</p>
+            </article>
+            <article class="feature-card reveal">
+              <h3 class="feature-title">Продажа техники</h3>
+              <p class="feature-text">Новая и с наработкой, полный пакет документов, помощь в выборе.</p>
+            </article>
+            <article class="feature-card reveal">
+              <h3 class="feature-title">Сервис и ремонт</h3>
+              <p class="feature-text">Диагностика, ТО, капитальный ремонт узлов и агрегатов.</p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="container">
+          <div class="section-head reveal">
+            <h2 class="section-title">Почему выбирают нас</h2>
+            <p class="section-desc">Фокус на скорости, прозрачности и результате.</p>
+          </div>
+
+          <div class="grid perks-grid">
+            <div class="perk reveal"><strong>Каталог 5000+ позиций</strong><span>Запчасти для всех основных марок</span></div>
+            <div class="perk reveal"><strong>Подбор по VIN/модели</strong><span>Найдем точный аналог или оригинал</span></div>
+            <div class="perk reveal"><strong>Склад в Москве</strong><span>Отправка в день заказа</span></div>
+            <div class="perk reveal"><strong>Опытные техконсультанты</strong><span>Поможем с выбором и совместимостью</span></div>
+            <div class="perk reveal"><strong>Гарантия на всё</strong><span>От 3 месяцев на запчасти и технику</span></div>
+            <div class="perk reveal"><strong>Логистика под ключ</strong><span>Доставим в любой регион РФ и СНГ</span></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section section--muted">
+        <div class="container">
+          <div class="section-head reveal">
+            <h2 class="section-title">Как мы работаем</h2>
+          </div>
+          <ol class="steps">
+            <li class="step reveal"><span class="step-num">1</span><span>Вы оставляете заявку или звоните</span></li>
+            <li class="step reveal"><span class="step-num">2</span><span>Уточняем детали и подбираем решение</span></li>
+            <li class="step reveal"><span class="step-num">3</span><span>Согласовываем стоимость и сроки</span></li>
+            <li class="step reveal"><span class="step-num">4</span><span>Доставляем, выдаем, сопровождаем</span></li>
+          </ol>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="container footer-inner">
+        <div class="footer-col">
+          <div class="footer-title">Норд Вест</div>
+          <p class="footer-text">Запчасти и техника для строительства и спецтранспорта.</p>
+        </div>
+        <div class="footer-col">
+          <div class="footer-title">Контакты</div>
+          <ul class="footer-links">
+            <li><a href="contacts.html">Страница контактов</a></li>
+            <li><a data-contact-link="email" href="mailto:info@example.com">info@example.com</a></li>
+            <li><a data-contact-link="telegram" href="https://t.me/example" target="_blank" rel="noopener">Telegram</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <div class="footer-title">Навигация</div>
+          <ul class="footer-links">
+            <li><a href="catalog.html">Каталог</a></li>
+            <li><a href="delivery.html">Доставка</a></li>
+            <li><a href="contacts.html">Контакты</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <div class="container footer-bottom-inner">
+          <span>© <span id="year"></span> Норд Вест</span>
+          <a class="to-top" href="#content">Наверх</a>
+        </div>
+      </div>
+    </footer>
+
+    <div class="modal-overlay" id="equipment-modal" hidden>
+      <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+        <button class="modal-close" type="button" data-modal-close aria-label="Закрыть">×</button>
+        <div class="modal-body" id="modal-body">
+          <h3 id="modal-title">Загрузка…</h3>
+        </div>
+      </div>
+    </div>
+
+    <button class="back-to-top" type="button" data-back-to-top aria-label="Наверх" hidden>
+      <span aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 19V5"></path>
+          <path d="M5 12l7-7 7 7"></path>
+        </svg>
+      </span>
+    </button>
+
+    <div class="fab" data-fab>
+      <div class="fab-menu" id="fab-menu" hidden></div>
+      <div class="fab-row">
+        <button class="fab-toggle" type="button" data-theme-toggle aria-label="Переключить тему">
+          <span aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"></path>
+            </svg>
+          </span>
+        </button>
+        <button class="fab-btn" type="button" aria-expanded="false" aria-controls="fab-menu">
+          <span class="fab-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.86 19.86 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6A19.86 19.86 0 0 1 2.08 4.18 2 2 0 0 1 4.06 2h3a2 2 0 0 1 2 1.72c.12.86.31 1.7.57 2.51a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.57-1.09a2 2 0 0 1 2.11-.45c.81.26 1.65.45 2.51.57A2 2 0 0 1 22 16.92z"></path>
+            </svg>
+          </span>
+          <span class="sr-only">Связаться</span>
+        </button>
+      </div>
+    </div>
+
+    <script type="module" src="js/main.js"></script>
+  </body>
+</html>

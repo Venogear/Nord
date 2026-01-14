@@ -1,0 +1,160 @@
+@media (min-width: 576px) {
+  .equipment-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .category-tiles,
+  .brand-tiles {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .features-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .perks-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .footer-inner {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 18px;
+  }
+}
+
+@media (min-width: 768px) {
+  .hero-inner {
+    grid-template-columns: 1.4fr 0.8fr;
+    align-items: start;
+    gap: 18px;
+  }
+
+  /* Главная без правой панели */
+  .hero-inner.hero-inner--single {
+    grid-template-columns: 1fr;
+  }
+
+  .catalog-head {
+    grid-template-columns: 1fr 360px;
+    align-items: end;
+  }
+
+  .form-shell {
+    padding: 18px;
+  }
+
+  .form-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .steps {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .contact-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (min-width: 992px) {
+  .domain-switch {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .category-tiles,
+  .brand-tiles {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+@media (max-width: 991px) {
+  /* (catalog sidebar styles removed — catalog is now single-column) */
+}
+
+@media (min-width: 992px) {
+  .equipment-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .perks-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .nav-toggle {
+    display: none;
+  }
+}
+
+@media (max-width: 991px) {
+  .header-inner {
+    justify-content: space-between;
+  }
+  
+  .header-phone {
+    display: inline-flex;
+    font-size: 12px;
+    order: 3;
+    margin-left: 0;
+    margin-right: 0;
+  }
+
+  .products-controls {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .products-view {
+    justify-content: flex-start;
+  }
+
+  .nav-toggle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    order: 2;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+  
+  .brand {
+    order: 1;
+  }
+  
+  .site-nav {
+    order: 4;
+  }
+
+  .site-nav {
+    position: fixed;
+    min-width: 200px;
+    max-width: calc(100vw - 24px);
+    background: var(--card);
+    border: 1px solid var(--gray-100);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    padding: 12px;
+    display: none;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 6px;
+    z-index: 200;
+  }
+
+  .site-nav.is-open {
+    display: flex;
+  }
+
+  .nav-link {
+    width: 100%;
+    text-align: left;
+  }
+
+  /* CTA не растягиваем на всю ширину, чтобы фон не выглядел “огромным” */
+  .nav-link--cta {
+    width: fit-content;
+    align-self: flex-start;
+  }
+}
+
+

@@ -48,7 +48,7 @@ export const CATEGORY_TILE_IMAGES = {
   all: "images/categories/all.jpg",
   excavators: "images/categories/excavators.jpg",
   bulldozers: "images/categories/bulldozers.jpg",
-  itp: "images/categories/itp.jpg",
+  tires: "images/categories/tires.jpg",
 };
 
 

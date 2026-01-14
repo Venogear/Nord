@@ -196,7 +196,15 @@ html[data-theme="dark"] .site-header {
   justify-content: center;
 }
 
-.header-phone {
+.header-contacts {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  align-items: flex-end;
+}
+
+.header-phone,
+.header-email {
   display: inline-flex;
   align-items: baseline;
   gap: 6px;
@@ -209,21 +217,28 @@ html[data-theme="dark"] .site-header {
   white-space: nowrap;
 }
 
+.header-email {
+  font-size: 12px;
+}
+
 .header-phone-label {
   font-weight: 400;
   color: var(--muted);
 }
 
-.header-phone-number {
+.header-phone-number,
+.header-email-text {
   font-weight: 700;
   color: var(--text);
 }
 
-.header-phone:hover .header-phone-number {
+.header-phone:hover .header-phone-number,
+.header-email:hover .header-email-text {
   text-decoration: underline;
 }
 
-.header-phone:focus-visible {
+.header-phone:focus-visible,
+.header-email:focus-visible {
   outline: 2px solid rgba(35, 114, 233, 0.45);
   outline-offset: 2px;
 }

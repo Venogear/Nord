@@ -73,16 +73,16 @@ function resolveCategoryImage(categoryId, fallbackFromData) {
   // Default local images by CategoryId (so you don't need to fill CategoryImage in the sheet)
   const map = {
     front_loaders: "images/categories/front-loaders.png",
-    bulldozers: "images/categories/bulldozers.png",
+    bulldozers: "images/categories/bulldozers.jpg",
     excavators: "images/categories/excavators.png",
     engines: "images/categories/engines.jpg",
-    forklifts: "images/categories/itp.jpg",
+    forklifts: "images/categories/tires.jpg",
     asphalt_pavers: "images/categories/large_asfaltoukladchik-min.jpg",
     autograders: "images/categories/large_autograder.jpg",
     compressor_stations: "images/categories/large_compressor.jpg",
     pneumo_cylinders: "images/categories/pneumo_cylinders.jpg",
     filters: "images/categories/filters.jpg",
-    tires: "images/categories/all.jpg",
+    tires: "images/categories/tires.jpg",
     oils: "images/categories/oils.jpg",
   };
   return map[String(categoryId || "").trim()] || "";

@@ -1,3 +1,17 @@
+@media (max-width: 575px) {
+  .header-contacts {
+    gap: 1px;
+  }
+  
+  .header-phone {
+    font-size: 11px;
+  }
+  
+  .header-email {
+    font-size: 10px;
+  }
+}
+
 @media (min-width: 576px) {
   .equipment-grid {
     grid-template-columns: repeat(2, 1fr);
@@ -90,12 +104,20 @@
     justify-content: space-between;
   }
   
+  .header-contacts {
+    order: 3;
+    gap: 2px;
+  }
+  
   .header-phone {
     display: inline-flex;
     font-size: 12px;
-    order: 3;
     margin-left: 0;
     margin-right: 0;
+  }
+  
+  .header-email {
+    font-size: 11px;
   }
 
   .products-controls {

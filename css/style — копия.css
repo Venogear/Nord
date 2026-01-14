@@ -1,6 +1,6 @@
 :root {
   --blue: #2c3e50;
-  --red: #2372e9;
+  --red: #e74c3c;
   --gold: #d4af37;
   /* Accent used for catalog domain switch active state (light theme) */
   --accent: var(--red);
@@ -47,8 +47,6 @@ html {
   scroll-behavior: smooth;
   /* Offset for anchor navigation under sticky header */
   scroll-padding-top: 84px;
-  /* Reserve space for scrollbar to prevent layout shift */
-  scrollbar-gutter: stable;
 }
 
 /* Ensure consistent anchor positioning (used in catalog #road/#warehouse) */
@@ -63,8 +61,6 @@ body {
   color: var(--text);
   background: #fff;
   line-height: 1.5;
-  /* Reserve space for scrollbar to prevent layout shift */
-  scrollbar-gutter: stable;
 }
 
 a {
@@ -80,8 +76,6 @@ a:hover {
   width: min(100% - 32px, var(--container));
   margin-inline: auto;
 }
-
-/* (catalog sidebar styles removed — catalog is now single-column) */
 
 .sr-only {
   position: absolute;
@@ -119,9 +113,9 @@ a:hover {
   margin: 12px;
   padding: 12px 14px;
   border-radius: var(--radius);
-  border: 1px solid rgba(35, 114, 233, 0.25);
-  background: rgba(35, 114, 233, 0.06);
-  color: #0d3d7a;
+  border: 1px solid rgba(231, 76, 60, 0.25);
+  background: rgba(231, 76, 60, 0.06);
+  color: #5c1711;
   box-shadow: var(--shadow);
 }
 
@@ -153,10 +147,9 @@ html[data-theme="dark"] .site-header {
 .header-inner {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: flex-start;
   min-height: 64px;
   gap: 12px;
-  position: relative;
 }
 
 .brand {
@@ -165,12 +158,11 @@ html[data-theme="dark"] .site-header {
   gap: 0px;
   font-weight: 700;
   letter-spacing: 0.2px;
-  margin-top: -18px;
 }
 
 .brand-mark {
-  width: 120px;
-  height: 60px;
+  width: 42px;
+  height: 42px;
   display: grid;
   place-items: center;
   border-radius: 10px;
@@ -190,21 +182,12 @@ html[data-theme="dark"] .site-header {
   display: flex;
   align-items: center;
   gap: 10px;
-  position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
+  flex: 1;
   justify-content: center;
+  min-width: 0;
 }
 
-.header-contacts {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-  align-items: flex-end;
-}
-
-.header-phone,
-.header-email {
+.header-phone {
   display: inline-flex;
   align-items: baseline;
   gap: 6px;
@@ -217,10 +200,6 @@ html[data-theme="dark"] .site-header {
   white-space: nowrap;
 }
 
-.header-email {
-  font-size: 12px;
-}
-
 .header-phone-label {
   font-weight: 400;
   color: var(--muted);
@@ -231,19 +210,12 @@ html[data-theme="dark"] .site-header {
   color: var(--text);
 }
 
-.header-email-text {
-  font-weight: 400;
-  color: var(--text);
-}
-
-.header-phone:hover .header-phone-number,
-.header-email:hover .header-email-text {
+.header-phone:hover .header-phone-number {
   text-decoration: underline;
 }
 
-.header-phone:focus-visible,
-.header-email:focus-visible {
-  outline: 2px solid rgba(35, 114, 233, 0.45);
+.header-phone:focus-visible {
+  outline: 2px solid rgba(231, 76, 60, 0.45);
   outline-offset: 2px;
 }
 
@@ -378,7 +350,7 @@ html[data-theme="dark"] .nav-link--cta:hover {
 /* Hero */
 .hero {
   background: radial-gradient(1000px 500px at 20% 20%, rgba(44, 62, 80, 0.12), transparent),
-    radial-gradient(900px 450px at 85% 30%, rgba(35, 114, 233, 0.12), transparent);
+    radial-gradient(900px 450px at 85% 30%, rgba(231, 76, 60, 0.12), transparent);
   border-bottom: 1px solid var(--gray-100);
 }
 
@@ -569,7 +541,7 @@ html[data-theme="dark"] .btn--ghost:hover {
   aspect-ratio: 16/10;
   border-radius: 12px;
   background-image: url("../images/branding/logo-mark.png"),
-    linear-gradient(135deg, rgba(44, 62, 80, 0.08), rgba(35, 114, 233, 0.08));
+    linear-gradient(135deg, rgba(44, 62, 80, 0.08), rgba(231, 76, 60, 0.08));
   background-repeat: no-repeat, no-repeat;
   background-position: center, center;
   background-size: 64px 64px, cover;
@@ -608,75 +580,6 @@ html[data-theme="dark"] .btn--ghost:hover {
   box-shadow: 0 12px 30px rgba(0, 0, 0, 0.18);
 }
 
-/* Catalog: tiles are informational (no click/navigation yet) */
-.catalog-content .tile {
-  cursor: default;
-}
-
-.catalog-content .tile:hover {
-  transform: none;
-  box-shadow: none;
-  border-color: var(--border);
-}
-
-/* Catalog: brand tiles as "image-only" with tooltip */
-.catalog-content .tile--logo {
-  width: 175px;
-  height: 175px;
-  grid-template-rows: 1fr;
-  position: relative;
-}
-
-.catalog-content .tile--logo .tile-body {
-  display: none;
-}
-
-.catalog-content .tile--logo .tile-media {
-  /* Square logo cards: fill the tile */
-  height: 100%;
-  background-size: cover;
-  background-repeat: no-repeat;
-  background-position: center;
-}
-
-.catalog-content #catalog-brands.brand-tiles {
-  /* Fixed-size brand cards */
-  grid-template-columns: repeat(auto-fit, 175px);
-  justify-content: start;
-  gap: 12px;
-}
-
-.catalog-content .tile--logo::after {
-  content: attr(data-tooltip);
-  position: absolute;
-  left: 50%;
-  bottom: 10px;
-  transform: translateX(-50%);
-  max-width: calc(100% - 16px);
-  padding: 6px 10px;
-  border-radius: 10px;
-  font-size: 12px;
-  line-height: 1.1;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  background: rgba(15, 23, 34, 0.88);
-  color: #fff;
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 140ms ease;
-}
-
-.catalog-content .tile--logo:hover::after {
-  opacity: 1;
-}
-
-/* Catalog: highlight duplicate cards for client review */
-.catalog-content .tile.is-duplicate .tile-title,
-.catalog-content .tile.is-duplicate .tile-linklike {
-  color: #e11d48; /* red */
-}
-
 .tile-media {
   /* Use a fixed backdrop so images look identical in light/dark themes */
   background: #f1f5f9;
@@ -693,8 +596,7 @@ html[data-theme="dark"] .btn--ghost:hover {
   background-image: url("../images/branding/logo-mark.png");
   background-repeat: no-repeat;
   background-position: center;
-  /* Keep logo aspect ratio (don't stretch) */
-  background-size: 100px auto;
+  background-size: 56px 56px;
 }
 
 .tile-body {
@@ -770,8 +672,8 @@ html[data-theme="dark"] .tile-linklike {
 }
 
 .view-btn.is-active {
-  border-color: rgba(35, 114, 233, 0.35);
-  box-shadow: 0 0 0 2px rgba(35, 114, 233, 0.12);
+  border-color: rgba(231, 76, 60, 0.35);
+  box-shadow: 0 0 0 2px rgba(231, 76, 60, 0.12);
 }
 
 html[data-theme="dark"] .view-btn.is-active {
@@ -847,7 +749,7 @@ html[data-theme="dark"] .products-grid--list .product-thumb {
   display: block;
   width: 100%;
   background-image: url("../images/branding/logo-mark.png"),
-    linear-gradient(135deg, rgba(44, 62, 80, 0.08), rgba(35, 114, 233, 0.08));
+    linear-gradient(135deg, rgba(44, 62, 80, 0.08), rgba(231, 76, 60, 0.08));
   background-repeat: no-repeat, no-repeat;
   background-position: center, center;
   background-size: 56px 56px, cover;
@@ -941,19 +843,18 @@ html[data-theme="dark"] .product-thumb {
   cursor: pointer;
   position: relative;
   overflow: hidden;
-  min-height: 120px;
-  display: flex;
-
+  min-height: 140px;
 }
 
 .domain-btn::before {
   content: "";
   position: absolute;
   inset: 0;
-  background-image: inherit;
+  background-image: var(--domain-bg);
   background-size: cover;
   background-position: center;
   filter: saturate(0.95) contrast(1.02);
+  transform: scale(1.02);
 }
 
 .domain-btn::after {
@@ -1161,7 +1062,7 @@ html[data-theme="dark"] .chip.is-active {
   aspect-ratio: 16/10;
   border-radius: 12px;
   border: 1px solid var(--gray-100);
-  background: linear-gradient(135deg, rgba(44, 62, 80, 0.08), rgba(35, 114, 233, 0.08));
+  background: linear-gradient(135deg, rgba(44, 62, 80, 0.08), rgba(231, 76, 60, 0.08));
   overflow: hidden;
 }
 
@@ -1251,8 +1152,8 @@ html[data-theme="dark"] .category-tile.is-active {
 .field.is-error input,
 .field.is-error select,
 .field.is-error textarea {
-  border-color: rgba(35, 114, 233, 0.7);
-  background: rgba(35, 114, 233, 0.04);
+  border-color: rgba(231, 76, 60, 0.7);
+  background: rgba(231, 76, 60, 0.04);
 }
 
 .hint {
@@ -1313,9 +1214,9 @@ html[data-theme="dark"] .category-tile.is-active {
 }
 
 .form-status.is-error {
-  border-color: rgba(35, 114, 233, 0.25);
-  background: rgba(35, 114, 233, 0.06);
-  color: #0d3d7a;
+  border-color: rgba(231, 76, 60, 0.25);
+  background: rgba(231, 76, 60, 0.06);
+  color: #5c1711;
 }
 
 .btn-spinner {
@@ -1476,7 +1377,7 @@ html[data-theme="dark"] .site-footer a:hover {
   border: 1px solid var(--gray-100);
   overflow: hidden;
   background-image: url("../images/branding/logo-mark.png"),
-    linear-gradient(135deg, rgba(44, 62, 80, 0.08), rgba(35, 114, 233, 0.08));
+    linear-gradient(135deg, rgba(44, 62, 80, 0.08), rgba(231, 76, 60, 0.08));
   background-repeat: no-repeat, no-repeat;
   background-position: center, center;
   background-size: 84px 84px, cover;
@@ -1512,7 +1413,7 @@ html[data-theme="dark"] .modal-image-wrap {
   border-radius: 12px;
   border: 2px solid transparent;
   background-image: url("../images/branding/logo-mark.png"),
-    linear-gradient(135deg, rgba(44, 62, 80, 0.06), rgba(35, 114, 233, 0.06));
+    linear-gradient(135deg, rgba(44, 62, 80, 0.06), rgba(231, 76, 60, 0.06));
   background-repeat: no-repeat, no-repeat;
   background-position: center, center;
   background-size: 22px 22px, cover;

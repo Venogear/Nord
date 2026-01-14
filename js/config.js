@@ -45,10 +45,10 @@ export const CACHE = {
 // Картинки категорий для плиток в каталоге
 // Положите файлы в `images/categories/`
 export const CATEGORY_TILE_IMAGES = {
-  all: "/images/categories/all.jpg",
-  excavators: "/images/categories/excavators.jpg",
-  bulldozers: "/images/categories/bulldozers.jpg",
-  itp: "/images/categories/itp.jpg",
+  all: "images/categories/all.jpg",
+  excavators: "images/categories/excavators.jpg",
+  bulldozers: "images/categories/bulldozers.jpg",
+  itp: "images/categories/itp.jpg",
 };
 
 

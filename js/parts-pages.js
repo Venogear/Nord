@@ -379,9 +379,9 @@ function renderCatalogSidebarTiles() {
   // - existing: use current files from images/categories/
   // - missing: prepared filenames (add these files to images/categories/)
   const CATALOG_CATEGORY_IMAGE_BY_NAME = {
-    "ДВИГАТЕЛИ": "images/categories/engines.jpg",
-    "ФИЛЬТРЫ": "images/categories/filters.jpg",
-    "ШИНЫ": "images/categories/all.jpg",
+    "ДВИГАТЕЛИ": "",
+    "ФИЛЬТРЫ": "",
+    "ШИНЫ": "",
     "ТРАНСМИССИИ КОРОБКИ ПЕРЕДАЧ": "images/categories/transmissions.jpg",
     "ГИДРАВЛИЧЕСКИЕ УЗЛЫ И АГРЕГАТЫ": "images/categories/hydraulics.jpg",
     "КОРОНКИ": "images/categories/crowns.jpg",

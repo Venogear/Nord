@@ -950,7 +950,6 @@ html[data-theme="dark"] .product-thumb {
   background-size: cover;
   background-position: center;
   filter: saturate(0.95) contrast(1.02);
-  transform: scale(1.02);
 }
 
 .domain-btn::after {

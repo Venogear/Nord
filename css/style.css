@@ -226,9 +226,13 @@ html[data-theme="dark"] .site-header {
   color: var(--muted);
 }
 
-.header-phone-number,
-.header-email-text {
+.header-phone-number {
   font-weight: 700;
+  color: var(--text);
+}
+
+.header-email-text {
+  font-weight: 400;
   color: var(--text);
 }
 

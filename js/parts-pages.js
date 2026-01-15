@@ -76,7 +76,7 @@ function resolveCategoryImage(categoryId, fallbackFromData) {
     bulldozers: "images/categories/bulldozers.jpg",
     excavators: "images/categories/excavators.png",
     engines: "images/categories/engines.jpg",
-    forklifts: "",
+    forklifts: "images/categories/warehouse.jpg",
     asphalt_pavers: "images/categories/large_asfaltoukladchik-min.jpg",
     autograders: "images/categories/large_autograder.jpg",
     compressor_stations: "images/categories/large_compressor.jpg",
